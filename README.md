@@ -13,7 +13,7 @@
 
 ## Tutorials
 ### Jupyter notebook
-1. Download MetaPaCS and LIMMAdata.csv from the github
+1. Download MetaPaCS and ICGCfilterREDO.csv from the github
 2. Open the MetaPaCS code in jupyter notebook
 3. Specify the current directory, put ICGCfilterREDO.csv or your input data into this directory
 
