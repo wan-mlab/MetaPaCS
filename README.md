@@ -15,7 +15,7 @@
 ### Jupyter notebook
 1. Download MetaPaCS and LIMMAdata.csv from the github
 2. Open the MetaPaCS code in jupyter notebook
-3. Specify the current directory, put LIMMAdata.csv or your input data in this directory
+3. Specify the current directory, put ICGCfilterREDO.csv or your input data into this directory
 
 <pre> ```from xgboost import XGBClassifier
 
@@ -24,7 +24,7 @@ os.chdir("") #set to your working directory
 warnings.filterwarnings("ignore", category=UserWarning) ``` </pre>
 
 
-4. Put LIMMAdata.csv (test data) or your own input data (must be structured as below) in this directory and specify the desired output directory
+4. Put ICGCfilterREDO.csv (test data) or your own input data (must be structured as below) in this directory and specify the desired output directory
 
 <pre> ```INPUT_CSV = "./ICGCfilterREDO.csv"
 OUTPUT_ROOT = "./output" #change to your desired output name ``` </pre>
