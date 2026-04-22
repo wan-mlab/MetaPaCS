@@ -103,8 +103,10 @@ Mengtao Sun, Nick Peterson, Shibiao Wan, Xinchao Wu
 
 ## Publication
 MetaPaCS: A novel meta-learning model for pancreatic cancer subtype prediction
+
 Nick Peterson, Mengtao Sun, Xinchao Wu, Jieqiong Wang, Shibiao Wan
-bioRxiv TBD; doi: TBD
+
+bioRxiv: TBD; doi: TBD
 
 ## License 
 
