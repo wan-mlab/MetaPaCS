@@ -74,12 +74,25 @@ OUTPUT_ROOT = "./output" #change to your desired output name ``` </pre>
 
 ## Example Output
 
-The prediction results and evaluations will be stored and exported into a folder in your specified directory.
+Prediction results and metric evaluations will be stored and exported into your specified directory.
 Evaluations are saved for all base and meta-learning classifiers.
 
 ''''''
 
-![Example Outputs](OUTPUTgithub.png)
+<pre> ```id,subtype,ADEX,Immunogenic,Progenitor,Squamous
+sample_0,Squamous,0.0,0.0,0.0,1.0
+sample_1,Squamous,0.0,0.1953058553169964,0.5868802737443134,0.21781387093869026
+sample_2,Squamous,0.0,0.19247046826594083,0.0,0.8075295317340592
+sample_3,Squamous,0.0,0.3964767329887792,0.6035232670112207,0.0
+sample_4,Squamous,0.0,0.0,0.0,1.0
+sample_5,Squamous,0.19955025179030403,0.0,0.4027345561897074,0.3977151920199886
+sample_6,Squamous,0.0,0.0,0.18637300010545574,0.8136269998945442
+sample_7,Squamous,0.0,0.39584798075864586,0.0,0.6041520192413542
+sample_8,Squamous,0.0,0.0,1.0,0.0
+sample_9,Squamous,0.0,0.0,0.19702980625976635,0.8029701937402337 ``` </pre>
+
+<pre> ```combo_id,base_combo,n_base_models,stage,model_name,Accuracy,Precision,Weighted Recall,Recall (Sensitivity),F1 Score,MCC,G-Measure,AUC,Specificity,Jaccard Index
+1,knn__qda,2,individual_models,knn,0.8229166666666666,0.8363970588235294,0.8229166666666666,0.8343750000000001,0.8257049663299663,0.7623277641519601,0.8841843921274374,0.9487928915030587,0.9382655783183952,0.7250000000000001 ``` </pre>
 
 ## Bug Report
 
