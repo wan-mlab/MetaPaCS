@@ -17,45 +17,64 @@
 2. Open the MetaPaCS code in jupyter notebook
 3. Specify the current directory, put LIMMAdata.csv or your input data in this directory
 
-<pre> ```import os
-   os.chdir() #change to your directory
-   import pandas as pd
-   !pip install torch torchvision torchaudio ``` </pre>
+<pre> ```from xgboost import XGBClassifier
+
+os.chdir("") #set to your working directory
+
+warnings.filterwarnings("ignore", category=UserWarning) ``` </pre>
 
 
-4. Put LIMMAdata.csv (test data) or your own input data (must be structured as below) in this directory
+4. Put LIMMAdata.csv (test data) or your own input data (must be structured as below) in this directory and specify the desired output directory
 
-<pre> ```le = LabelEncoder()
-   x = pd.read_csv('') #your file here
-   data = "" #give the data a name ``` </pre>
-
+<pre> ```INPUT_CSV = "./ICGCfilterREDO.csv"
+OUTPUT_ROOT = "./output" #change to your desired output name ``` </pre>
 
 
-5. Specify the target directory for the output in the evaluation area of the code
-6. Enter in the name of your input in block 4, run the code in the order of the block
-## Optional
-1. Use the other blocks of part 4 to measure performance of all possible unique combinations of 2 or 4 base classifiers
-2. Change the configuration of the code to work for the combination blocks by removing the hashtags from the path below to open the alternate output path
 
-<pre> ```#filepath = '//' #for combination testing, enter the directory path for saving the results
-    folderpath = "//" #enter the directory path for saving the results
-    #folderpath = "/" #for combination testing
-    foldername = f"{run}/"
-    filepath = f"{folderpath}{foldername}"
-    subdir = f"{testing}/{stacked}/{model_name}/"    
-    filename = f"{data}({randomstate}),metrics.csv"
-    filename2 = f"predictions.csv"
-    full_path = os.path.join(filepath, subdir, filename)  #evaluation
-    full_path2 = os.path.join(filepath, subdir, filename2) #predictions ``` </pre>
+5. enable the desired classifier algorithms in the base and stacking catalog
 
-   
-```
+<pre> ```def build_model_catalog(seed: int) -> Tuple[List[Tuple[str, object]], List[Tuple[str, object]]]:
+    base_catalog = [
+        ("svm_rbf", SVC(kernel="rbf", probability=True, break_ties=True, random_state=1, C=1, gamma="scale", class_weight=None)),
+        ("svm_linear", SVC(kernel="linear", probability=True, break_ties=True, random_state=1, C=0.00075, class_weight="balanced")),
+        ("lr", LogisticRegression(max_iter=700, solver="lbfgs")),
+        ("rf", RandomForestClassifier(n_estimators=100, random_state=seed, n_jobs=1)),
+        ("xgb", XGBClassifier(n_estimators=300, eval_metric="logloss", random_state=seed, subsample=1.0, colsample_bytree=1.0, n_jobs=1)),
+        ("knn", KNeighborsClassifier(n_neighbors=5, weights="distance")),
+        ("qda", QuadraticDiscriminantAnalysis(reg_param=1.0, store_covariance=True, tol=0.0)),
+        ("dt", DecisionTreeClassifier(random_state=SEED)),
+        ("mlp", MLPClassifier(activation="relu", alpha=0.0001, learning_rate="constant", max_iter=210, batch_size=8, solver="adam", hidden_layer_sizes=(100, 100), random_state=SEED, shuffle=True)),
+        ("nb", GaussianNB())
+    ]
+
+    stack_catalog = [
+        ("stack_xgb", XGBClassifier(n_estimators=300, eval_metric="logloss", random_state=seed, subsample=1.0, colsample_bytree=1.0, n_jobs=1)),
+        ("stack_qda", QuadraticDiscriminantAnalysis(reg_param=1.0, store_covariance=True, tol=0.0)),
+        ("stack_knn", KNeighborsClassifier(n_neighbors=5, weights="distance")),
+        ("stack_rf", RandomForestClassifier(n_estimators=100, random_state=seed, n_jobs=1)),
+        ("stack_lr", LogisticRegression(max_iter=700, solver="lbfgs")),
+        ("stack_svm_rbf", SVC(kernel="rbf", probability=True, break_ties=True, random_state=1, C=1.5, gamma="scale", class_weight="balanced")),
+        ("stack_svm_linear", SVC(kernel="linear", probability=True, break_ties=True, random_state=1)),
+        ("stack_dt", DecisionTreeClassifier(random_state=SEED)),
+        ("stack_mlp", MLPClassifier(activation="relu", alpha=0.0001, learning_rate="constant", max_iter=210, batch_size=8, solver="adam", hidden_layer_sizes=(100, 100), random_state=SEED, shuffle=True)),
+        ("stack_nb", GaussianNB())
+    ]
+    return base_catalog, stack_catalog ``` </pre>
+
+6. set the combination testing number to the same number as the amount of classifiers or to the desired size of combinations to be tested
+
+   <pre> ```def generate_base_combinations(base_catalog: List[Tuple[str, object]]) -> List[Tuple[List[str], List[object]]]:
+    all_combos: List[Tuple[List[str], List[object]]] = []
+    indices = list(range(len(base_catalog)))
+
+    #if only using a single configuration, set the range to (number of base classifiers, number of base classifiers +1)
+    #if testing combinations, set the number to the desired amount of classifiers within the combination (ex. range(2, 3) will test all combinations of 2 classifier)
+    for r in range(10, 11):  ``` </pre>
 
 
-```
 ## Example Output
 
-The prediction results and evaluations will be stored and exported to a folder named stackeval (10 classifiers LOO) in your specified directory.
+The prediction results and evaluations will be stored and exported into a folder in your specified directory.
 Evaluations are saved for all base and meta-learning classifiers.
 
 ''''''
